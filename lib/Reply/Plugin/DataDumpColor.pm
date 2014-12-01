@@ -8,7 +8,7 @@ use warnings;
 
 use base 'Reply::Plugin';
 
-use Data::Dump::Color 'dumpf';
+use Data::Dump::Color 'dump';
 use overload ();
 
 sub new {
@@ -32,9 +32,13 @@ sub new {
 }
 
 sub mangle_result {
+    local $Data::Dump::Color::COLOR = 1;
+
     my $self = shift;
     my (@result) = @_;
-    return @result ? dumpf(@result, $self->{filter}) : ();
+    # Data::Dump::Color currently does not support filtering
+    #return @result ? dumpf(@result, $self->{filter}) : ();
+    return @result ? dump(@result) : ();
 }
 
 1;
@@ -44,7 +48,6 @@ sub mangle_result {
 
  ; .replyrc
  [DataDumpColor]
- respect_stringification = 1
 
 =head1 DESCRIPTION
 
